@@ -1,0 +1,1 @@
+export const catFactsURI: string = "https://catfact.ninja/fact";
