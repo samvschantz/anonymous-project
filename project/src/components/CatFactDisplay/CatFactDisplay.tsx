@@ -1,27 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Button, Card, CardActions, CardContent, Typography } from '@mui/material';
 import { catFactsURI } from '../../constants/uriConstants';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-
-type CatFact = {
-    fact: string,
-    length: number 
-}
+import { useCatFacts } from '../../fetchHooks/useCatFacts';
 
 const CatFactDisplay = () => {
 
-
-    const fetchCatFacts = () =>
-        fetch(catFactsURI).then((res) =>
-            res.json(),
-        )
-
-    const { data, isLoading, isError, refetch } = useQuery<CatFact>({
-        queryKey: ['catFact'],
-        queryFn: fetchCatFacts,
-        staleTime: Infinity,
-        enabled: false,
-    })
+    const { data, isLoading, isError, refetch } = useCatFacts();
 
     let body;
 
@@ -34,8 +19,12 @@ const CatFactDisplay = () => {
     }
 
     if (data) {
-        body = <Typography variant="body1">{data.fact}</Typography>;
+        body = <Typography data-testid="valid-fact" variant="body1">{data.fact}</Typography>;
     }
+
+    useEffect(() => {
+        refetch();
+    }, [])
 
     return (
         <Box
@@ -54,10 +43,10 @@ const CatFactDisplay = () => {
             >
                 <CardContent>
                     <>
-                        <Typography aria-role='header' variant="h3">Cat Fact:</Typography>
+                        <Typography role='header' variant="h3">Cat Fact:</Typography>
                         {body}
                         <CardActions>
-                            <Button aria-role='button' aria-description='Refresh Cat Fact' onClick={() => refetch()}>Refresh</Button>
+                            <Button aria-description='Refresh Cat Fact' onClick={() => refetch()}>Refresh</Button>
                         </CardActions>
                     </>
                 </CardContent>

@@ -16,7 +16,7 @@ export const App = () =>
   <ThemeProvider theme={darkTheme}>
     <QueryClientProvider client={queryClient}>
       <Paper className="App">
-          <CatFactDisplay />
+        <CatFactDisplay />
       </Paper>
     </QueryClientProvider>
   </ThemeProvider>
